@@ -1,0 +1,23 @@
+name: Docs
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  docs-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate required docs
+        run: |
+          set -euo pipefail
+          test -f README.md
+          test -f PROJECT_CONTEXT.md
+          test -f docs/architecture.md
+          test -f docs/mvp-roadmap.md
+          test -f docs/dimona-api-integration.md
+          test -f docs/adr/0001-use-woocommerce-as-commerce-engine.md
+          grep -R "Dimona" README.md PROJECT_CONTEXT.md docs >/dev/null
+          grep -R "WooCommerce" README.md PROJECT_CONTEXT.md docs >/dev/null
