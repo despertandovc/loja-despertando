@@ -1,0 +1,98 @@
+services:
+  db:
+    image: mariadb:11.4
+    container_name: wp-loja-despertando-db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${WORDPRESS_DB_NAME}
+      MARIADB_USER: ${WORDPRESS_DB_USER}
+      MARIADB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+    volumes:
+      - ./db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -uroot -p$${MARIADB_ROOT_PASSWORD} --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks:
+      - loja_despertando_internal
+
+  redis:
+    image: redis:7-alpine
+    container_name: wp-loja-despertando-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - ./redis-data:/data
+    networks:
+      - loja_despertando_internal
+
+  wordpress:
+    image: wordpress:php8.3-apache
+    container_name: wp-loja-despertando-wordpress
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_ENVIRONMENT_TYPE', 'staging');
+        define('DISALLOW_FILE_EDIT', true);
+        define('AUTOMATIC_UPDATER_DISABLED', true);
+        if (isset($$_SERVER['HTTP_X_FORWARDED_PROTO']) && $$_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+            $$_SERVER['HTTPS'] = 'on';
+        }
+    volumes:
+      - ./wp-data:/var/www/html
+      - ./logs:/var/log/despertando-commerce
+    ports:
+      - "127.0.0.1:${WP_PORT}:80"
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: proxy
+      traefik.http.routers.wp-loja-despertando-http.entrypoints: http
+      traefik.http.routers.wp-loja-despertando-http.rule: Host(`loja.staging.despertando.com.br`)
+      traefik.http.routers.wp-loja-despertando-http.middlewares: wp-loja-despertando-redirect-https
+      traefik.http.middlewares.wp-loja-despertando-redirect-https.redirectscheme.scheme: https
+      traefik.http.routers.wp-loja-despertando-https.entrypoints: https
+      traefik.http.routers.wp-loja-despertando-https.rule: Host(`loja.staging.despertando.com.br`)
+      traefik.http.routers.wp-loja-despertando-https.service: wp-loja-despertando
+      traefik.http.routers.wp-loja-despertando-https.tls: "true"
+      traefik.http.routers.wp-loja-despertando-https.tls.certresolver: letsencrypt
+      traefik.http.services.wp-loja-despertando.loadbalancer.server.port: "80"
+    networks:
+      - loja_despertando_internal
+      - proxy
+
+  wpcli:
+    image: wordpress:cli-php8.3
+    container_name: wp-loja-despertando-wpcli
+    depends_on:
+      db:
+        condition: service_healthy
+      wordpress:
+        condition: service_started
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+    volumes:
+      - ./wp-data:/var/www/html
+    user: "33:33"
+    networks:
+      - loja_despertando_internal
+    entrypoint: ["wp"]
+
+networks:
+  loja_despertando_internal:
+    name: loja_despertando_internal
+  proxy:
+    external: true
