@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Despertando Commerce Core
  * Description: Núcleo operacional da Loja Despertando para fulfillment, Dimona, logs e futuras integrações de marketplace, afiliados e dropshipping.
- * Version: 0.2.0
+ * Version: 0.3.0
  * Author: Despertando
  * Text Domain: despertando-commerce-core
  * Requires at least: 6.5
@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('DCC_VERSION', '0.2.0');
+define('DCC_VERSION', '0.3.0');
 define('DCC_PLUGIN_FILE', __FILE__);
 define('DCC_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('DCC_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -30,6 +30,11 @@ require_once DCC_PLUGIN_DIR . 'includes/Dimona/Settings.php';
 require_once DCC_PLUGIN_DIR . 'includes/Dimona/ProductFields.php';
 require_once DCC_PLUGIN_DIR . 'includes/Dimona/OrderPanel.php';
 require_once DCC_PLUGIN_DIR . 'includes/Dimona/ReprocessAction.php';
+require_once DCC_PLUGIN_DIR . 'includes/Dimona/HttpClient.php';
+require_once DCC_PLUGIN_DIR . 'includes/Dimona/ShippingMethod.php';
+require_once DCC_PLUGIN_DIR . 'includes/Dimona/WebhookController.php';
+require_once DCC_PLUGIN_DIR . 'includes/Dimona/TrackingRepository.php';
+require_once DCC_PLUGIN_DIR . 'includes/Dimona/OrderService.php';
 require_once DCC_PLUGIN_DIR . 'includes/Plugin.php';
 
 

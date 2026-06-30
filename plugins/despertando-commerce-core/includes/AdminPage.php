@@ -79,6 +79,30 @@ final class AdminPage
                             <p class="description">A API key deve ser configurada fora do banco e fora do chat, por constante <code>DCC_DIMONA_API_KEY</code> ou variável de ambiente <code>DIMONA_API_KEY</code>. O valor nunca é exibido.</p>
                         </td>
                     </tr>
+                    <tr>
+                        <th scope="row">Create Order real</th>
+                        <td>
+                            <label>
+                                <input type="checkbox" name="<?php echo esc_attr(\Despertando\Commerce\Core\Dimona\Settings::OPTION_CREATE_ORDER_ENABLED); ?>" value="1" <?php checked($this->dimonaSettings->isCreateOrderEnabled()); ?>>
+                                Permitir criação real de pedido na Dimona
+                            </label>
+                            <p class="description"><strong>Trava de segurança:</strong> mantenha desligado até o primeiro teste real autorizado.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Dry-run</th>
+                        <td>
+                            <label>
+                                <input type="checkbox" name="<?php echo esc_attr(\Despertando\Commerce\Core\Dimona\Settings::OPTION_DRY_RUN); ?>" value="1" <?php checked($this->dimonaSettings->isDryRun()); ?>>
+                                Preparar payload sem enviar Create Order
+                            </label>
+                            <p class="description">Mesmo com API key configurada, o pedido real não é criado enquanto o dry-run estiver ativo.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Webhook URL</th>
+                        <td><code><?php echo esc_html($this->dimonaSettings->webhookUrl()); ?></code></td>
+                    </tr>
                 </table>
                 <?php submit_button('Salvar Dimona'); ?>
             </form>
