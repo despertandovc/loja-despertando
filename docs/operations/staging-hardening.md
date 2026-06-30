@@ -10,6 +10,7 @@
 - DNS-only na Cloudflare para sub-subdomínio `loja.staging.despertando.com.br`.
 - `.env` real apenas na VPS.
 - Backups locais antes de mudanças relevantes.
+- `wpcli` fica em `profiles: ["tools"]` para não aparecer como serviço encerrado no Dockge.
 
 ## Plugins
 
