@@ -71,7 +71,7 @@ final class WooCommerceShippingMethod extends \WC_Shipping_Method
                 }
             }
 
-            if ($fulfillmentType === FulfillmentTypes::TYPE_DIMONA) {
+            if ($fulfillmentType === 'dimona') {
                 $quantity += max(1, (int) ($cartItem['quantity'] ?? 1));
             }
         }
