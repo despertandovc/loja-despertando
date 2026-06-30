@@ -66,3 +66,15 @@ No MVP 1, ativar somente `own_stock` e `dimona`.
 - Não pedir ou expor secrets no chat.
 - Persistir decisões importantes em documentação ou ADR.
 - Produção, DNS/proxy público, secrets reais, pagamentos reais, bancos/volumes reais e ações destrutivas exigem checkpoint humano.
+
+
+## Decisões Dimona após planilha SKU
+
+- Planilha recebida: `Dropsimples _ Catálogo de SKU's _ Atualizado 15 de Agosto de 2025.xlsx`.
+- Aba útil: `SKUs 2025`.
+- Campos: Código SKU, Nome, Estilo, Cor, Tamanho, NCM.
+- Registros úteis inspecionados: 985.
+- O catálogo será tratado como base importável/versionável para SKU Dimona.
+- Frete Dimona deve ser calculado por endpoint da Dimona desde o MVP 1.
+- Webhook Dimona é obrigatório para rastreamento/status.
+- Rastreamento deve ser completo, com eventos, código, transportadora, URL e status amigável para o cliente.

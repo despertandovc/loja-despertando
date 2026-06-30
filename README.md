@@ -25,6 +25,7 @@ Bootstrap documental. Ainda não há código de aplicação.
 - [Stack VPS](docs/vps-stack.md)
 - [Estratégia WooCommerce](docs/woocommerce-strategy.md)
 - [Integração Dimona API](docs/dimona-api-integration.md)
+- [Fluxo Dimona MVP 1](docs/dimona-flow.md)
 - [Marketplace MVP 2](docs/marketplace-mvp2.md)
 - [Produtos afiliados MVP 2](docs/affiliate-products-mvp2.md)
 - [Dropshipping MVP 2](docs/dropshipping-mvp2.md)
