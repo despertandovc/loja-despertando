@@ -102,7 +102,7 @@ final class OrderService
                     $fulfillmentType = (string) $parent->get_meta(FulfillmentTypes::META_KEY);
                 }
             }
-            if ($fulfillmentType !== FulfillmentTypes::TYPE_DIMONA) {
+            if ($fulfillmentType !== 'dimona') {
                 continue;
             }
             $dimonaSkuId = (string) $product->get_meta(ProductFields::META_PRODUCT_ID);
