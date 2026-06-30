@@ -18,11 +18,14 @@ final class Plugin
 
     private Dimona\Settings $dimonaSettings;
 
+    private Dimona\HttpClient $dimonaHttpClient;
+
     private function __construct()
     {
         $this->logger = new IntegrationLogger();
         $this->fulfillmentTypes = new FulfillmentTypes();
         $this->dimonaSettings = new Dimona\Settings();
+        $this->dimonaHttpClient = new Dimona\HttpClient($this->dimonaSettings);
     }
 
     public static function instance(): self
@@ -44,6 +47,9 @@ final class Plugin
     {
         $this->fulfillmentTypes->registerHooks();
         $this->dimonaSettings->registerHooks();
+        Dimona\ShippingMethod::registerHooks();
+        (new Dimona\WebhookController($this->dimonaSettings, $this->logger, new Dimona\TrackingRepository()))->registerHooks();
+        (new Dimona\OrderService($this->dimonaSettings, $this->dimonaHttpClient, $this->logger))->registerHooks();
         (new FulfillmentRouter($this->logger))->registerHooks();
 
         if (is_admin()) {

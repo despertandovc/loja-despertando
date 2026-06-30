@@ -12,6 +12,8 @@ final class Settings
 {
     public const OPTION_ENVIRONMENT = 'dcc_dimona_environment';
     public const OPTION_BASE_URL = 'dcc_dimona_base_url';
+    public const OPTION_CREATE_ORDER_ENABLED = 'dcc_dimona_create_order_enabled';
+    public const OPTION_DRY_RUN = 'dcc_dimona_dry_run';
 
     public function registerHooks(): void
     {
@@ -29,7 +31,19 @@ final class Settings
         register_setting('dcc_dimona_settings', self::OPTION_BASE_URL, [
             'type' => 'string',
             'sanitize_callback' => 'esc_url_raw',
-            'default' => 'https://api.camisadimona.com.br',
+            'default' => 'https://admin.camisadimona.com.br',
+        ]);
+
+        register_setting('dcc_dimona_settings', self::OPTION_CREATE_ORDER_ENABLED, [
+            'type' => 'boolean',
+            'sanitize_callback' => static fn ($value): bool => (bool) $value,
+            'default' => false,
+        ]);
+
+        register_setting('dcc_dimona_settings', self::OPTION_DRY_RUN, [
+            'type' => 'boolean',
+            'sanitize_callback' => static fn ($value): bool => (bool) $value,
+            'default' => true,
         ]);
     }
 
@@ -42,7 +56,7 @@ final class Settings
 
     public function baseUrl(): string
     {
-        $value = get_option(self::OPTION_BASE_URL, 'https://api.camisadimona.com.br');
+        $value = get_option(self::OPTION_BASE_URL, 'https://admin.camisadimona.com.br');
 
         return rtrim(esc_url_raw((string) $value), '/');
     }
@@ -56,6 +70,32 @@ final class Settings
         $envValue = getenv('DIMONA_API_KEY');
 
         return is_string($envValue) && $envValue !== '';
+    }
+
+
+    public function apiKey(): string
+    {
+        if (defined('DCC_DIMONA_API_KEY') && is_string(DCC_DIMONA_API_KEY)) {
+            return (string) DCC_DIMONA_API_KEY;
+        }
+
+        $envValue = getenv('DIMONA_API_KEY');
+        return is_string($envValue) ? $envValue : '';
+    }
+
+    public function isCreateOrderEnabled(): bool
+    {
+        return (bool) get_option(self::OPTION_CREATE_ORDER_ENABLED, false);
+    }
+
+    public function isDryRun(): bool
+    {
+        return (bool) get_option(self::OPTION_DRY_RUN, true);
+    }
+
+    public function webhookUrl(): string
+    {
+        return rest_url('despertando-commerce/v1/dimona/webhook');
     }
 
     public function credentialSource(): string
