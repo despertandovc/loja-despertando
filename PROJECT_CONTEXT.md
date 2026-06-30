@@ -52,6 +52,13 @@ O WooCommerce será o motor de e-commerce. O plugin próprio concentrará as reg
 
 No MVP 1, ativar somente `own_stock` e `dimona`.
 
+## Staging atual
+
+- URL pública: `https://loja.staging.despertando.com.br`.
+- Stack: `/opt/stacks/wp-loja-despertando`.
+- DNS Cloudflare: A record DNS-only para `137.131.143.139`.
+- TLS: Traefik/Let's Encrypt na VPS.
+
 ## Regras de continuidade
 
 - Não correlacionar este projeto com outros projetos salvo pedido explícito.

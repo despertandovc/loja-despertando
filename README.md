@@ -30,6 +30,20 @@ Bootstrap documental. Ainda não há código de aplicação.
 - [Dropshipping MVP 2](docs/dropshipping-mvp2.md)
 - [ADRs](docs/adr/)
 
+## Staging atual
+
+```text
+https://loja.staging.despertando.com.br
+```
+
+Documentação operacional:
+
+- [Acesso ao staging](docs/operations/staging-access.md)
+- [Deploy do plugin](docs/operations/deploy-plugin.md)
+- [Backup e restore](docs/operations/backup-restore.md)
+- [Hardening do staging](docs/operations/staging-hardening.md)
+- [DNS do staging](docs/operations/dns-staging.md)
+
 ## Guardrails
 
 - Nunca alterar `main` diretamente após o bootstrap inicial do repositório.
