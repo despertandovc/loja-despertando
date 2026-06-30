@@ -41,6 +41,7 @@ final class Plugin
     {
         IntegrationLogger::createTable();
         update_option('dcc_version', DCC_VERSION, false);
+        Dimona\TrackingRepository::createTable();
     }
 
     public function boot(): void
