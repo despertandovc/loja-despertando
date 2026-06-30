@@ -16,10 +16,13 @@ final class Plugin
 
     private FulfillmentTypes $fulfillmentTypes;
 
+    private Dimona\Settings $dimonaSettings;
+
     private function __construct()
     {
         $this->logger = new IntegrationLogger();
         $this->fulfillmentTypes = new FulfillmentTypes();
+        $this->dimonaSettings = new Dimona\Settings();
     }
 
     public static function instance(): self
@@ -40,10 +43,14 @@ final class Plugin
     public function boot(): void
     {
         $this->fulfillmentTypes->registerHooks();
+        $this->dimonaSettings->registerHooks();
         (new FulfillmentRouter($this->logger))->registerHooks();
 
         if (is_admin()) {
-            (new AdminPage($this->logger, $this->fulfillmentTypes))->registerHooks();
+            (new Dimona\ProductFields())->registerHooks();
+            (new Dimona\OrderPanel($this->logger))->registerHooks();
+            (new Dimona\ReprocessAction($this->logger))->registerHooks();
+            (new AdminPage($this->logger, $this->fulfillmentTypes, $this->dimonaSettings))->registerHooks();
             add_action('admin_notices', [$this, 'renderWooCommerceNotice']);
             add_filter('plugin_action_links_' . DCC_PLUGIN_BASENAME, [$this, 'addActionLinks']);
         }

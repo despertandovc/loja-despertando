@@ -74,6 +74,8 @@ final class FulfillmentRouter
         );
 
         if (isset($summary['dimona'])) {
+            $order->update_meta_data('_dcc_dimona_status', 'pending_api_integration');
+            $order->save();
             $order->add_order_note('Despertando Commerce Core: item Dimona detectado. A chamada real da API Dimona será ativada na fase de integração do MVP 1.');
         }
     }
