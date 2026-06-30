@@ -25,7 +25,7 @@ O staging usa o plugin copiado para:
 
 ```bash
 cd /opt/stacks/wp-loja-despertando
-WP='docker compose run --rm --user 0 wpcli --allow-root'
+WP='docker compose --profile tools run --rm --user 0 wpcli --allow-root'
 $WP plugin is-active woocommerce
 $WP plugin is-active despertando-commerce-core
 $WP plugin get despertando-commerce-core --field=version
