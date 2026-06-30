@@ -11,6 +11,7 @@
 - `.env` real apenas na VPS.
 - Backups locais antes de mudanças relevantes.
 - `wpcli` fica em `profiles: ["tools"]` para não aparecer como serviço encerrado no Dockge.
+- Variáveis `DIMONA_API_KEY` e `DIMONA_WEBHOOK_SECRET` devem ser injetadas em `wordpress` e `wpcli`; o `.env` sozinho não expõe essas chaves aos containers.
 
 ## Plugins
 
