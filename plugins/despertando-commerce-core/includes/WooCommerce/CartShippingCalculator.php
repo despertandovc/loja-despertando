@@ -18,7 +18,7 @@ final class CartShippingCalculator
         add_filter('woocommerce_shipping_calculator_enable_postcode', '__return_true');
         add_filter('woocommerce_default_address_fields', [$this, 'adjustPostcodeLabel'], 20);
         add_filter('gettext', [$this, 'translateCartShippingCalculatorText'], 20, 3);
-        add_action('woocommerce_after_shipping_calculator', [$this, 'renderBrazilHiddenFields'], 5);
+        add_action('woocommerce_before_shipping_calculator', [$this, 'renderBrazilHiddenFields'], 5);
         add_action('wp_loaded', [$this, 'forceBrazilForCartShippingCalculator'], 1);
         add_filter('woocommerce_customer_get_shipping_country', [$this, 'defaultBrazilCountry'], 10, 2);
         add_filter('woocommerce_customer_get_billing_country', [$this, 'defaultBrazilCountry'], 10, 2);
@@ -57,7 +57,7 @@ final class CartShippingCalculator
 
     public function renderBrazilHiddenFields(): void
     {
-        echo '<input type="hidden" name="calc_shipping_country" value="BR">';
+        echo '<input type="hidden" name="calc_shipping_country" value="BR">' . "\n";
     }
 
     public function forceBrazilForCartShippingCalculator(): void
