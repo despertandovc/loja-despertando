@@ -20,6 +20,7 @@ final class CartShippingCalculator
         add_filter('gettext', [$this, 'translateCartShippingCalculatorText'], 20, 3);
         add_action('woocommerce_before_shipping_calculator', [$this, 'renderBrazilHiddenFields'], 5);
         add_action('wp_loaded', [$this, 'forceBrazilForCartShippingCalculator'], 1);
+        add_action('wp_footer', [$this, 'renderCartShippingScript'], 20);
         add_filter('woocommerce_customer_get_shipping_country', [$this, 'defaultBrazilCountry'], 10, 2);
         add_filter('woocommerce_customer_get_billing_country', [$this, 'defaultBrazilCountry'], 10, 2);
     }
@@ -58,6 +59,47 @@ final class CartShippingCalculator
     public function renderBrazilHiddenFields(): void
     {
         echo '<input type="hidden" name="calc_shipping_country" value="BR">' . "\n";
+    }
+
+
+    public function renderCartShippingScript(): void
+    {
+        if (!function_exists('is_cart') || !is_cart()) {
+            return;
+        }
+        ?>
+        <script>
+        (function () {
+            function ensureBrazilHiddenField() {
+                var forms = document.querySelectorAll('form.woocommerce-shipping-calculator');
+                forms.forEach(function (form) {
+                    var field = form.querySelector('input[name="calc_shipping_country"]');
+                    if (!field) {
+                        field = document.createElement('input');
+                        field.type = 'hidden';
+                        field.name = 'calc_shipping_country';
+                        form.appendChild(field);
+                    }
+                    field.value = 'BR';
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', ensureBrazilHiddenField);
+            document.addEventListener('submit', function (event) {
+                if (event.target && event.target.matches('form.woocommerce-shipping-calculator')) {
+                    ensureBrazilHiddenField();
+                }
+            }, true);
+            document.addEventListener('click', function (event) {
+                if (event.target && event.target.closest('.shipping-calculator-button')) {
+                    window.setTimeout(ensureBrazilHiddenField, 50);
+                }
+            }, true);
+            document.body && document.body.addEventListener('updated_wc_div', ensureBrazilHiddenField);
+            ensureBrazilHiddenField();
+        })();
+        </script>
+        <?php
     }
 
     public function forceBrazilForCartShippingCalculator(): void
