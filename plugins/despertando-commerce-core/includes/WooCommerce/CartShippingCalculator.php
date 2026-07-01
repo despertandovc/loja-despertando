@@ -17,6 +17,7 @@ final class CartShippingCalculator
         add_filter('woocommerce_shipping_calculator_enable_city', '__return_false');
         add_filter('woocommerce_shipping_calculator_enable_postcode', '__return_true');
         add_filter('woocommerce_default_address_fields', [$this, 'adjustPostcodeLabel'], 20);
+        add_filter('gettext', [$this, 'translateCartShippingCalculatorText'], 20, 3);
         add_action('wp_loaded', [$this, 'forceBrazilForCartShippingCalculator'], 5);
         add_filter('woocommerce_customer_get_shipping_country', [$this, 'defaultBrazilCountry'], 10, 2);
         add_filter('woocommerce_customer_get_billing_country', [$this, 'defaultBrazilCountry'], 10, 2);
@@ -35,6 +36,21 @@ final class CartShippingCalculator
         }
 
         return $fields;
+    }
+
+
+    public function translateCartShippingCalculatorText(string $translation, string $text, string $domain): string
+    {
+        if ($domain !== 'woocommerce') {
+            return $translation;
+        }
+
+        return match ($text) {
+            'Calculate shipping' => 'Calcular frete',
+            'Postcode / ZIP:' => 'CEP:',
+            'Update' => $this->isCartShippingCalculatorRequest() ? 'Calcular' : $translation,
+            default => $translation,
+        };
     }
 
     public function forceBrazilForCartShippingCalculator(): void
