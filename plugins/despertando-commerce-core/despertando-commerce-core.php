@@ -30,6 +30,7 @@ require_once DCC_PLUGIN_DIR . 'includes/Dimona/Settings.php';
 require_once DCC_PLUGIN_DIR . 'includes/Dimona/ProductFields.php';
 require_once DCC_PLUGIN_DIR . 'includes/Dimona/OrderPanel.php';
 require_once DCC_PLUGIN_DIR . 'includes/Dimona/ReprocessAction.php';
+require_once DCC_PLUGIN_DIR . 'includes/WooCommerce/CartShippingCalculator.php';
 require_once DCC_PLUGIN_DIR . 'includes/Dimona/HttpClient.php';
 require_once DCC_PLUGIN_DIR . 'includes/Dimona/ShippingMethod.php';
 require_once DCC_PLUGIN_DIR . 'includes/Dimona/WebhookController.php';
