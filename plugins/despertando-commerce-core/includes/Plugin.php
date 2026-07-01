@@ -47,6 +47,7 @@ final class Plugin
     public function boot(): void
     {
         (new WooCommerce\CartShippingCalculator())->registerHooks();
+        WooCommerce\TestPaymentGateway::registerHooks();
         $this->fulfillmentTypes->registerHooks();
         $this->dimonaSettings->registerHooks();
         Dimona\ShippingMethod::registerHooks();
